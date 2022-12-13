@@ -45,7 +45,7 @@ Shader "Unlit/BasicLighting"
                 UNITY_TRANSFER_FOG(o,o.vertex);
                 float3 N = normalize(UnityObjectToWorldNormal(v.normal));
                 float3 V = normalize(_WorldSpaceCameraPos - mul( unity_ObjectToWorld, v.vertex));
-                o.light = clamp(dot(V, N), 0.5, 1.0);
+                o.light = clamp(dot(V, N) + 0.1, 0.5, 1.0);
                 return o;
             }
 
