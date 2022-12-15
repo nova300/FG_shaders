@@ -24,14 +24,14 @@ Shader "Unlit/BasicLighting"
             uniform float4 _Color;
             uniform float4 _A_Color;
 
-            struct appdata
+            struct MeshData
             {
                 float4 vertex : POSITION;
                 float3 normal : NORMAL;
                 float2 uv : TEXCOORD0;
             };
 
-            struct v2f
+            struct Interpolators
             {
                 float2 uv : TEXCOORD0;
                 float light : TEXCOORD1;
@@ -43,9 +43,9 @@ Shader "Unlit/BasicLighting"
             sampler2D _MainTex;
             float4 _MainTex_ST;
 
-            v2f vert (appdata v)
+            Interpolators vert (MeshData v)
             {
-                v2f o;
+                Interpolators o;
                 o.vertex = UnityObjectToClipPos(v.vertex);
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex);
                 UNITY_TRANSFER_FOG(o,o.vertex);
@@ -56,7 +56,7 @@ Shader "Unlit/BasicLighting"
                 return o;
             }
 
-            fixed4 frag (v2f i) : SV_Target
+            fixed4 frag (Interpolators i) : SV_Target
             {
                 // sample the texture
                 fixed4 col = tex2D(_MainTex, i.uv) * i.colour;
