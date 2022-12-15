@@ -59,7 +59,6 @@ Shader "Unlit/BasicLighting"
                 // sample the texture
                 fixed4 col = tex2D(_MainTex, i.uv) * _Color;
                 col += _A_Color * _A_Color.a;
-                col += UNITY_LIGHTMODEL_AMBIENT * UNITY_LIGHTMODEL_AMBIENT.a;
                 col *= i.light;
                 // apply fog
                 UNITY_APPLY_FOG(i.fogCoord, col);
