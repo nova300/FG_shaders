@@ -2,6 +2,8 @@ Shader "Unlit/BasicLighting"
 {
     Properties
     {
+        _Color ("Base_Color", Color) = (1.000000,1.000000,1.000000,1.000000)
+        _A_Color ("Albedo_Color", Color) = (0.000000,0.000000,0.000000,0.000000)
         _MainTex ("Texture", 2D) = "white" {}
     }
     SubShader
@@ -18,6 +20,9 @@ Shader "Unlit/BasicLighting"
             #pragma multi_compile_fog
 
             #include "UnityCG.cginc"
+
+            uniform float4 _Color;
+            uniform float4 _A_Color;
 
             struct appdata
             {
@@ -52,7 +57,9 @@ Shader "Unlit/BasicLighting"
             fixed4 frag (v2f i) : SV_Target
             {
                 // sample the texture
-                fixed4 col = tex2D(_MainTex, i.uv);
+                fixed4 col = _Color;
+                col *= tex2D(_MainTex, i.uv);
+                col += _A_Color * _A_Color.a;
                 col *= i.light;
                 // apply fog
                 UNITY_APPLY_FOG(i.fogCoord, col);
