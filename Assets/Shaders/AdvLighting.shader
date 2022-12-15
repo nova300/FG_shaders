@@ -1,4 +1,4 @@
-Shader "Unlit/BasicLighting"
+Shader "Unlit/AdvLighting"
 {
     Properties
     {
