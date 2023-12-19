@@ -3,6 +3,7 @@ Shader "Custom/Ripple"
     Properties
     {
         _MainTex ("Texture", 2D) = "white" {}
+        _RippleSource ("Ripple Source UV", Vector) = (1.0,1.0,0,0) 
     }
     SubShader
     {
@@ -29,10 +30,12 @@ Shader "Custom/Ripple"
                 float4 vertex : SV_POSITION;
             };
 
+            float4 _RippleSource;
+
             v2f vert (appdata v)
             {
                 v2f o;
-                float2 uvsCent = v.uv * 2 - 1;
+                float2 uvsCent = v.uv - _RippleSource.xy;
                 float radDist = length( uvsCent );
                 v.vertex.y += cos ((radDist - _Time.y * 0.5) * 3.14 * 3) * 0.5;
                 o.vertex = UnityObjectToClipPos(v.vertex);
@@ -47,9 +50,6 @@ Shader "Custom/Ripple"
 
             fixed4 frag (v2f i) : SV_Target
             {
-                float2 uvsCent = i.uv * 2 - 1;
-                float radDist = length( uvsCent );
-                //return cos ((radDist - _Time.y * 1.0) * 3.14 * 5) * 0.5;
                 fixed4 col = tex2D(_MainTex, i.uv);
                 col.rgb *= col.a;
                 return col;
